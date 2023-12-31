@@ -1,0 +1,24 @@
+package com.example.demo.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.model.RegisterUser;
+import com.example.demo.repository.RegisterUserRepo;
+
+@RestController
+@CrossOrigin("http://localhost:3000")
+public class RegisterUserController {
+	 @Autowired
+	    private RegisterUserRepo registerUserRepo;
+
+	    @PostMapping("/register")
+	    public String registerUser(@RequestBody RegisterUser registerUser) {
+	        // You may want to add validation logic before saving the user
+	        userRepository.save(user);
+	        return "User registered successfully!";
+	    }
+}

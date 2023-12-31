@@ -1,0 +1,17 @@
+package com.example.demo.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
+public class Part1 {
+	@Id
+	@GeneratedValue
+	private Long id;
+	private  String partName;
+	private String partPrice;
+	private String partDetail;
+	
+}

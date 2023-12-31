@@ -1,0 +1,22 @@
+package com.example.demo.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import com.example.demo.model.Part1;
+
+import com.example.demo.repository.Part1Repository;
+
+@RestController
+@CrossOrigin("http://localhost:3000")
+public class Part1Controller {
+	@Autowired
+	private Part1Repository part1Repository;
+	
+	@PostMapping("/part1")
+	Part1 newPart1(@RequestBody Part1 newPart1) {
+		return part1Repository.save(newPart1);
+	}
+}

@@ -1,0 +1,16 @@
+package com.example.demo.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.repository.Part1Repository;
+
+@RestController
+@CrossOrigin("http://localhost:3000")
+public class Part1Controller {
+	@Autowired
+	private Part1Repository part1Repository;
+	
+	
+}

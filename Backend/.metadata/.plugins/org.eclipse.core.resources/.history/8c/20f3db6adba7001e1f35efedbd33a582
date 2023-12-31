@@ -1,0 +1,5 @@
+package com.example.demo.exception;
+
+public class Part1NotFoundException extends RuntimeException{
+	super("Could not found the part1 with id " + id);
+}

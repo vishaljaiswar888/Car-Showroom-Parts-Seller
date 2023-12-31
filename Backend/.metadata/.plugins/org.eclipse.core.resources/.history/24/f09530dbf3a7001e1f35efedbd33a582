@@ -1,0 +1,82 @@
+package com.example.demo.service;
+
+import com.example.demo.exception.UserNotFoundException;
+import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
+
+@Service
+public class UserService {
+    @Autowired
+    private UserRepository userRepository;
+
+    public ResponseEntity<?> newUser(User newUser) {
+        // Check if the email already exists
+        if (userRepository.existsByEmail(newUser.getEmail())) {
+            // Email is already registered, throw an exception or return an appropriate response
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already registered");
+        }
+
+        // Save the new user if the email is not already registered
+        User savedUser = userRepository.save(newUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    public User updateUser(User newUser, Long id) {
+        return userRepository.findById(id)
+                .map(user -> {
+                    user.setUsername(newUser.getUsername());
+                    user.setName(newUser.getName());
+                    user.setEmail(newUser.getEmail());
+                    user.setPassword(newUser.getPassword());
+                    return userRepository.save(user);
+                }).orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    public String deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException(id);
+        }
+        userRepository.deleteById(id);
+        return "User with id " + id + " has been deleted successfully.";
+    }
+    
+    @PostMapping("/login")
+	public String login(@RequestBody User loginUser, HttpSession session) {
+	    User user = userRepository.findByEmailAndPassword(
+	            loginUser.getEmail(),
+	            loginUser.getPassword()
+	    );
+
+	    if (user != null) {
+	        // Set some user-related information in the session if needed
+	        session.setAttribute("userId", user.getId());
+	        return "Login successful";
+	    } else {
+	        // You might want to return an error message or status code here
+	        return "Invalid email or password";
+	    }
+	}
+
+    @PostMapping("/logout")
+    public String logout(HttpSession session) {
+        // Invalidate the session
+        session.invalidate();
+        return "Logged out successfully";
+    }
+}
